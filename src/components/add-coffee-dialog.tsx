@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Coffee } from '@prisma/client'
+import { type Coffee } from '@prisma/client'
 
 interface AddCoffeeDialogProps {
   isOpen: boolean
@@ -52,7 +52,7 @@ export function AddCoffeeDialog({ isOpen, onClose, onCoffeeAdded }: AddCoffeeDia
           </div>
           <div>
             <Label htmlFor="description">Description</Label>
-            <Textarea id="description" name="description" value={newCoffee.description || ''} onChange={handleInputChange} />
+            <Textarea id="description" name="description" value={newCoffee.description ?? ''} onChange={handleInputChange} />
           </div>
           <div>
             <Label htmlFor="price">Price</Label>

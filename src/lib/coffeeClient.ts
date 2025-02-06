@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { Coffee } from '@prisma/client'
-import { Key } from 'react'
+import { type Coffee } from '@prisma/client'
+import { type Key } from 'react'
 
 export async function fetchCoffees() {
   const response = await fetch('/api/coffee')

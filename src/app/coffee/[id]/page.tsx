@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client"
 import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,7 +10,7 @@ import { Pencil, ArrowLeft } from "lucide-react"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { Coffee } from '@prisma/client'
+import { type Coffee } from '@prisma/client'
 import { getCoffee, updateCoffee } from "@/lib/coffeeClient"
 
 export default function CoffeeDetailPage({ params }: { params: Promise<{ id: string }> }) {

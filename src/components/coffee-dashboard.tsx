@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,8 +27,8 @@ import Image from "next/image";
 import { useState } from "react";
 import { AddCoffeeDialog } from "./add-coffee-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Coffee } from "@prisma/client";
-import { Key } from "react";
+import { type Coffee } from "@prisma/client";
+import { type Key } from "react";
 import {
   Dialog,
   DialogContent,
@@ -49,7 +52,7 @@ export function CoffeeDashboard() {
   const deleteMutation = useMutation<void, Error, Key | null | undefined>({
     mutationFn: deleteCoffee,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["coffees"] });
+      void queryClient.invalidateQueries({ queryKey: ["coffees"] });
     },
   });
 
@@ -61,7 +64,7 @@ export function CoffeeDashboard() {
   >({
     mutationFn: addCoffee,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["coffees"] });
+      void queryClient.invalidateQueries({ queryKey: ["coffees"] });
     },
   });
   const totalCoffees = coffees.length;
