@@ -47,10 +47,16 @@ export default function CoffeeDetailPage({ params }: { params: Promise<{ id: str
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Convert price to number when handling input change
+    const processedValue = name === 'price' ? parseFloat(value) || 0 : value;
+    setFormData((prev) => ({ ...prev, [name]: processedValue }));
   };
 
   const handleSubmit = () => {
+    if (isNaN(formData.price)) {
+      alert('Please enter a valid price');
+      return;
+    }
     mutation.mutate({ id, data: formData });
   };
 
