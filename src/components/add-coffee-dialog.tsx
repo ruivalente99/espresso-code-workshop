@@ -21,22 +21,47 @@ export function AddCoffeeDialog({ isOpen, onClose, onCoffeeAdded }: AddCoffeeDia
     price: 0,
     image: "/placeholder.svg?height=100&width=100",
   })
+  const [imageFile, setImageFile] = useState<File | null>(null)
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setNewCoffee((prev) => ({ ...prev, [name]: name === "price" ? Number.parseFloat(value) : value }))
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null
+    setImageFile(file)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    onCoffeeAdded(newCoffee)
-    onClose()
-    setNewCoffee({
-      name: "",
-      description: "",
-      price: 0,
-      image: "/placeholder.svg?height=100&width=100",
-    })
+    if (imageFile) {
+      const formData = new FormData()
+      formData.append("name", newCoffee.name)
+      formData.append("description", newCoffee.description || "")
+      formData.append("price", newCoffee.price.toString())
+      formData.append("image", imageFile)
+
+      const response = await fetch("/api/coffee", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (response.ok) {
+        const addedCoffee = await response.json()
+        onCoffeeAdded(addedCoffee)
+        onClose()
+        setNewCoffee({
+          name: "",
+          description: "",
+          price: 0,
+          image: "/placeholder.svg?height=100&width=100",
+        })
+        setImageFile(null)
+      } else {
+        console.error("Failed to add coffee")
+      }
+    }
   }
 
   return (
@@ -67,8 +92,8 @@ export function AddCoffeeDialog({ isOpen, onClose, onCoffeeAdded }: AddCoffeeDia
             />
           </div>
           <div>
-            <Label htmlFor="image">Image URL</Label>
-            <Input id="image" name="image" type="url" value={newCoffee.image} onChange={handleInputChange} required />
+            <Label htmlFor="image">Image File</Label>
+            <Input id="image" name="image" type="file" accept="image/*" onChange={handleFileChange} required />
           </div>
           <Button type="submit">Add Coffee</Button>
         </form>
@@ -76,4 +101,3 @@ export function AddCoffeeDialog({ isOpen, onClose, onCoffeeAdded }: AddCoffeeDia
     </Dialog>
   )
 }
-
