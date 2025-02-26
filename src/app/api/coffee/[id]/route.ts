@@ -17,12 +17,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   try {
     const { id } = await params
     const { name, price, image }: Partial<Coffee> = await req.json() as Partial<Coffee>
+    
     const updatedCoffee = await prisma.coffee.update({
       where: { id: Number(id) },
       data: { name, price, image },
     })
     return NextResponse.json(updatedCoffee, { status: 200 })
-  } catch {
+  } catch (error) {
     return NextResponse.json({ error: 'Error updating coffee' }, { status: 400 })
   }
 }
